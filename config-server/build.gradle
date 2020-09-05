@@ -14,9 +14,6 @@ configurations {
 	}
 }
 
-repositories {
-	mavenCentral()
-}
 
 ext {
 	set('springCloudVersion', "Hoxton.SR8")
@@ -36,15 +33,4 @@ dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
-}
-
-task buildJar(type: Exec) {
-	executable "sh"
-	args "-c", "mkdir -p build/dependency && cd build/dependency && jar -xf ../libs/config-server*.jar"
-}
-
-check.dependsOn buildJar
-
-test {
-	useJUnitPlatform()
 }

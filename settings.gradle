@@ -1,0 +1,2 @@
+include 'config-server'
+include 'customer-service'
