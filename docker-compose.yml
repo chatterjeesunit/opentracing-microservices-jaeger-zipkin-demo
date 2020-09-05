@@ -1,0 +1,23 @@
+version: '3.8'
+
+networks:
+  internal-nw:
+    internal: true
+  external-nw:
+
+
+services:
+
+  config-server:
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+    - 9000:8080
+    networks:
+      internal-nw:
+      external-nw:
+
+
+
