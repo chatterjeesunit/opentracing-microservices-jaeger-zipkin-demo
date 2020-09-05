@@ -1,12 +1,6 @@
 allprojects {
     apply plugin: 'java'
 
-    repositories {
-        mavenCentral()
-    }
-
-
-
     task buildJar(type: Exec) {
         executable "sh"
         args "-c", "mkdir -p build/dependency && cd build/dependency && jar -xf ../libs/*.jar"

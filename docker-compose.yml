@@ -1,10 +1,8 @@
 version: '3.8'
-
 networks:
   internal-nw:
     internal: true
   external-nw:
-
 
 services:
 
@@ -14,10 +12,44 @@ services:
       dockerfile: Dockerfile
     restart: always
     ports:
-    - 9000:8080
+      - '9000:8080'
+    networks:
+      internal-nw:
+      external-nw:
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+
+  database:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: pgadmin
+      POSTGRES_PASSWORD: pgdmin#123
+      POSTGRES_DB: testdb
+    volumes:
+    - ~/data/jaeger-pgres-13:/var/lib/postgresql/data
+    - ./docker/postgres-init.sh:/docker-entrypoint-initdb.d/postgres-init.sh
+    ports:
+    - 5432:5432
     networks:
       internal-nw:
       external-nw:
 
-
-
+  customer-service:
+    build:
+      context: ./customer-service
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+      - config-server
+    restart: always
+    ports:
+      - '9001:8080'
+    environment:
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8080
+    networks:
+      internal-nw:
+      external-nw:

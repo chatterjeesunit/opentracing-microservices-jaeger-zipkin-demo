@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    hibernate:
+      use-new-id-generator-mappings: false
+      ddl-auto: validate
+  flyway:
+    baseline-version: 0.0
+    enabled: true
+    locations: classpath:db/migration
+    table: flyway_schema_history
+    baselineOnMigrate: true
+
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG

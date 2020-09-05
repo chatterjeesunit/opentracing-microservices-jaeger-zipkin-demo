@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: '{cipher}49461580bdc9b8bd76f8c660662add1df17c634bd6ea650003fd53235a319d865b92ed3f24782f9ff9a6356c241bff23d725ca5a6f39e454111249e6e04e5a70'
+    username: '{cipher}1beb5312ee81ca26e3f6abb807701b0399bbef0d16c24f65e76c594ae6a754fa'
+    password: '{cipher}e1e0a657661859b7f36dc5c34bc0cefe13a77abf03d5886dca8f0b71db8d0f16'
+    driver-class-name: org.postgresql.Driver
+
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    url: '{cipher}49461580bdc9b8bd76f8c660662add1df17c634bd6ea650003fd53235a319d865b92ed3f24782f9ff9a6356c241bff23d725ca5a6f39e454111249e6e04e5a70'
+    user: '{cipher}1beb5312ee81ca26e3f6abb807701b0399bbef0d16c24f65e76c594ae6a754fa'
+    password: '{cipher}e1e0a657661859b7f36dc5c34bc0cefe13a77abf03d5886dca8f0b71db8d0f16'
