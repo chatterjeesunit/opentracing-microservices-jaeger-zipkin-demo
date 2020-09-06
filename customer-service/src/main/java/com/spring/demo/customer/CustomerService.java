@@ -1,8 +1,8 @@
-package com.spring.demo.product;
+package com.spring.demo.customer;
 
-import com.spring.demo.product.domain.Customer;
-import com.spring.demo.product.entity.AddressEntity;
-import com.spring.demo.product.entity.CustomerEntity;
+import com.spring.demo.customer.domain.Customer;
+import com.spring.demo.customer.entity.AddressEntity;
+import com.spring.demo.customer.entity.CustomerEntity;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;

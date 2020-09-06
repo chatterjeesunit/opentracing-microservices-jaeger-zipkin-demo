@@ -18,7 +18,6 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity(name = "orders")
 public class OrderEntity {
 

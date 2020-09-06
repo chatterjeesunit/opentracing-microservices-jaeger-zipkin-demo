@@ -1,4 +1,4 @@
-package com.spring.demo.product;
+package com.spring.demo.customer;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

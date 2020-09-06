@@ -1,4 +1,4 @@
-package com.spring.demo.product.domain;
+package com.spring.demo.customer.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
