@@ -4,7 +4,7 @@ values
 (2, 'Computer & Accessories');
 
 
-insert into products(name, price, ratings, category_id, brand)
+insert into products(name, price, ratings, category_id, brand, product_guid)
 values
 ('Canon EOS 1500D 24.1 Digital SLR Camera (Black) with EF S18-55', 29990, 4.4, 1, 'Canon' , '7665d212-f062-11ea-8622-0242c0a88003'),
 ('GoPro HERO8 Black Holiday Bundle Pack', 38730, 4.5, 1, 'Go Pro', '766983d0-f062-11ea-8622-0242c0a88003'),

@@ -1,4 +1,4 @@
-insert into customer(id, email_address, first_name, last_name, gender)
+insert into customer(id, email_address, first_name, last_name, gender, customer_guid)
 values
 (1, 'superman@superheroes.com', 'Clark', 'Kent', 'MALE', '5c09f060-f062-11ea-9298-0242c0a88003' ),
 (2, 'batman@superheroes.com', 'Bruce', 'Wayne', 'MALE', '5c0e737e-f062-11ea-9298-0242c0a88003'),
