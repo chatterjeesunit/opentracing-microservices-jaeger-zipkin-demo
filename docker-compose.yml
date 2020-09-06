@@ -6,6 +6,21 @@ networks:
 
 services:
 
+  database:
+    image: 'postgres:13'
+    environment:
+      POSTGRES_USER: pgadmin
+      POSTGRES_PASSWORD: 'pgadmin#123'
+      POSTGRES_DB: testdb
+    volumes:
+      - ~/data/jaeger-pgres-13:/var/lib/postgresql/data
+      - ./docker/postgres-init.sh:/docker-entrypoint-initdb.d/postgres-init.sh
+    ports:
+      - 5432:5432
+    networks:
+      internal-nw:
+      external-nw:
+
   jaeger:
     image: 'jaegertracing/all-in-one:1.19'
     networks:
