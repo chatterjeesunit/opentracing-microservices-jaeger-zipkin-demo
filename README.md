@@ -28,7 +28,9 @@ Do this if you are starting the application for first time
    
 ## Data Creation
 Connect to PostGres (username: `pgadmin`, password: `pgadmin#123`), and run the sql scripts in `resources` folder to create the dummy data for this application.
-
+    - `Customer-DummyData.sql`  - Run on `customerdb`
+    - `Orders-DummyData.sql`    - Run on `orderdb`
+    - `Products-DummyData.sql`  - Run on `productdb`
 
 
 ## PostGres Admin

@@ -89,3 +89,24 @@ services:
     networks:
       internal-nw:
       external-nw:
+
+  order-service:
+    build:
+      context: ./order-service
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+      - config-server
+      - jaeger
+    restart: always
+    ports:
+      - 9003:8080
+    environment:
+      SPRING_CLOUD_CONFIG_URI: 'http://config-server:8080'
+      OPENTRACING_JAEGER_SERVICE-NAME: Order Service
+      OPENTRACING_JAEGER_ENABLED: 'true'
+      OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
+      OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
+    networks:
+      internal-nw:
+      external-nw:
