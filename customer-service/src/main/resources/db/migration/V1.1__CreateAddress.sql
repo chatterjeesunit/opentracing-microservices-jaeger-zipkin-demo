@@ -1,11 +1,11 @@
 drop table if exists address;
 
-CREATE TYPE address_type AS ENUM ('billing', 'shipping', 'other');
+CREATE TYPE address_type_enum AS ENUM ('BILLING', 'SHIPPING', 'HOME', 'OTHER');
 
 CREATE TABLE address (
   id SERIAL NOT NULL PRIMARY KEY,
   customer_id bigint,
-  address_type address_type,
+  address_type address_type_enum,
   city varchar(255) NOT NULL,
   country varchar(255) NOT NULL,
   state_code varchar(255) NOT NULL,
