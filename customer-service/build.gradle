@@ -36,6 +36,8 @@ dependencies {
 
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.0'
 
+	implementation group: 'io.opentracing.contrib', name: 'opentracing-spring-jaeger-cloud-starter', version: '3.1.2'
+
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

@@ -6,11 +6,30 @@ networks:
 
 services:
 
+  jaeger:
+    image: 'jaegertracing/all-in-one:1.19'
+    networks:
+      internal-nw:
+      external-nw:
+    environment:
+      COLLECTOR_ZIPKIN_HTTP_PORT: 9411
+    ports:
+      - 5775:5775/udp   # AGENT - accept zipkin.thrift over compact thrift protocol (deprecated)
+      - 6831:6831/udp   # AGENT - accept jaeger.thrift over compact thrift protocol
+      - 6832:6832/udp   # AGENT - accept jaeger.thrift over binary thrift protocol
+      - 5778:5778       # AGENT - serve configs
+      - 16686:16686     # QUERY - serve frontend
+      - 14268:14268     # COLLECTOR - accept jaeger.thrift directly from clients
+      - 14250:14250     # COLLECTOR - accept model.proto
+      - 9411:9411       # COLLECTOR - Zipkin compatible endpoint
+
   config-server:
     build:
       context: ./config-server
       dockerfile: Dockerfile
     restart: always
+    depends_on:
+      - jaeger
     ports:
       - '9000:8080'
     networks:
@@ -45,11 +64,17 @@ services:
     depends_on:
       - database
       - config-server
+      - jaeger
     restart: always
     ports:
       - '9001:8080'
     environment:
       SPRING_CLOUD_CONFIG_URI: 'http://config-server:8080'
+      OPENTRACING_JAEGER_SERVICE-NAME: "Customer Service"
+      OPENTRACING_JAEGER_ENABLED: 'true'
+      OPENTRACING_JAEGER_UDP-SENDER_HOST: 'jaeger'
+      OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
+
     networks:
       internal-nw:
       external-nw:
