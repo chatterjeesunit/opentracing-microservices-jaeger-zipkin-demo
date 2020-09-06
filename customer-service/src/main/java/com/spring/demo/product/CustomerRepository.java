@@ -1,6 +1,6 @@
-package com.spring.demo.customer;
+package com.spring.demo.product;
 
-import com.spring.demo.customer.entity.CustomerEntity;
+import com.spring.demo.product.entity.CustomerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

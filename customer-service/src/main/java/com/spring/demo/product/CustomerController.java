@@ -1,7 +1,7 @@
-package com.spring.demo.customer;
+package com.spring.demo.product;
 
 import com.spring.demo.common.ErrorMessage;
-import com.spring.demo.customer.domain.Customer;
+import com.spring.demo.product.domain.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import java.util.List;
 public class CustomerController {
 
     @Autowired
-    private com.spring.demo.customer.CustomerService customerService;
+    private com.spring.demo.product.CustomerService customerService;
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getCustomerDetail(@PathVariable(name = "id") String customerId) {

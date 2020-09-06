@@ -50,5 +50,5 @@ Connect to pgAdmin at http://localhost:5000, and login using the admin credentia
     
  - Get Config for Customer Service
  
-    `curl http://localhost:9000/customer-service/default`
+    `curl http://localhost:9000/product-service/default`
  

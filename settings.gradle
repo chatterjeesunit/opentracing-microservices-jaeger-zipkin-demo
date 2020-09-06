@@ -1,2 +1,3 @@
 include 'config-server'
 include 'customer-service'
+include 'product-service'

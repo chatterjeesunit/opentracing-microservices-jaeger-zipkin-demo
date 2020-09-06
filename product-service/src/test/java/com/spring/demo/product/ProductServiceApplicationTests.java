@@ -1,4 +1,4 @@
-package com.spring.demo.customer;
+package com.spring.demo.product;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Disabled
-class CustomerServiceApplicationTests {
+class ProductServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,30 +1,23 @@
-package com.spring.demo.customer;
+package com.spring.demo.product;
 
-import com.spring.demo.customer.domain.Customer;
-import com.spring.demo.customer.entity.AddressEntity;
-import com.spring.demo.customer.entity.CustomerEntity;
+import com.spring.demo.product.domain.Customer;
+import com.spring.demo.product.entity.AddressEntity;
+import com.spring.demo.product.entity.CustomerEntity;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Log4j2
-@CacheConfig(cacheNames = "customers")
 public class CustomerService {
 
     @Autowired
@@ -34,14 +27,12 @@ public class CustomerService {
     private ModelMapper modelMapper;
 
 
-    @Cacheable
     public Optional<Customer> getCustomerById(Long customerId) {
         log.info("Fetching customer by id: {}", customerId);
         Optional<CustomerEntity> customerEntity = customerRepository.findById(customerId);
         return customerEntity.map(customer -> modelMapper.map(customer, Customer.class));
     }
 
-    @CachePut(key = "#customer.id")
     public Customer create(Customer customer) {
         try {
             log.info("Creating a new customer with emailAddress: {}", customer.getEmailAddress());
@@ -55,7 +46,6 @@ public class CustomerService {
 
     }
 
-    @CachePut(key = "#customer.id")
     public Customer update(Customer customer) {
         log.info("Updating a customer with id: {}", customer.getId());
         Optional<CustomerEntity> optionalCustomer = customerRepository.findById(customer.getId());
@@ -82,7 +72,6 @@ public class CustomerService {
     }
 
 
-    @CacheEvict
     public void deleteCustomer(Long customerId) {
         try {
             customerRepository.deleteById(customerId);

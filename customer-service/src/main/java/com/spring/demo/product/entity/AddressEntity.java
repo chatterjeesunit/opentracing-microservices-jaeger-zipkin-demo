@@ -1,8 +1,8 @@
-package com.spring.demo.customer.entity;
+package com.spring.demo.product.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.spring.demo.common.db.PostgreSQLEnumType;
-import com.spring.demo.customer.domain.AddressType;
+import com.spring.demo.product.domain.AddressType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
