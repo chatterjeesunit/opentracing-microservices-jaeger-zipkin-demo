@@ -46,7 +46,7 @@ services:
     depends_on:
       - jaeger
     ports:
-      - '9000:8080'
+      - 8080
     environment:
       OPENTRACING_JAEGER_SERVICE-NAME: Config Service
       OPENTRACING_JAEGER_ENABLED: 'true'
@@ -54,7 +54,6 @@ services:
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
     networks:
       internal-nw:
-      external-nw:
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
       interval: 30s
@@ -72,7 +71,7 @@ services:
       - jaeger
     restart: always
     ports:
-      - 9001:8080
+      - 8080
     environment:
       SPRING_CLOUD_CONFIG_URI: 'http://config-server:8080'
       OPENTRACING_JAEGER_SERVICE-NAME: Customer Service
@@ -81,7 +80,6 @@ services:
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
     networks:
       internal-nw:
-      external-nw:
 
 
   product-service:
@@ -94,7 +92,7 @@ services:
       - jaeger
     restart: always
     ports:
-      - 9002:8080
+      - 8080
     environment:
       SPRING_CLOUD_CONFIG_URI: 'http://config-server:8080'
       OPENTRACING_JAEGER_SERVICE-NAME: Product Service
@@ -103,7 +101,6 @@ services:
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
     networks:
       internal-nw:
-      external-nw:
 
   order-service:
     build:
@@ -115,10 +112,33 @@ services:
       - jaeger
     restart: always
     ports:
-      - 9003:8080
+      - 8080
     environment:
       SPRING_CLOUD_CONFIG_URI: 'http://config-server:8080'
       OPENTRACING_JAEGER_SERVICE-NAME: Order Service
+      OPENTRACING_JAEGER_ENABLED: 'true'
+      OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
+      OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
+    networks:
+      internal-nw:
+
+
+  bff-service:
+    build:
+      context: ./bff-service
+      dockerfile: Dockerfile
+    depends_on:
+      - config-server
+      - customer-service
+      - product-service
+      - order-service
+      - jaeger
+    restart: always
+    ports:
+      - 9000:8080
+    environment:
+      SPRING_CLOUD_CONFIG_URI: 'http://config-server:8080'
+      OPENTRACING_JAEGER_SERVICE-NAME: BFF Service
       OPENTRACING_JAEGER_ENABLED: 'true'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831

@@ -66,6 +66,7 @@ public class CustomerService {
     }
 
     public List<Customer> findAll(Pageable pageable) {
+        log.info("Fetching customers - pageNum={}, pageSize={}", pageable.getPageNumber(), pageable.getPageSize());
         Page<CustomerEntity> results = customerRepository.findAll(pageable);
         List<CustomerEntity> customers = results.getContent();
         return modelMapper.map(customers, new TypeToken<List<Customer>>(){}.getType());

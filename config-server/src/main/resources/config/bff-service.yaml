@@ -1,0 +1,9 @@
+customers:
+  ribbon:
+    listOfServers: '{cipher}f2a35c9a710477780dda20272bcc51f129616caaf5c4b9460e4b1fa81939d75c20621e9a01ec6320a87e7a244048820a'
+products:
+  ribbon:
+    listOfServers: '{cipher}768b0d362fa91354659310fd0bb8bd25311a13090af8690abc6b98030ec02ca66cd5ed308f152b5326ad2ddbcfbca1ec'
+orders:
+  ribbon:
+    listOfServers:  '{cipher}4b41686fbbd4389a7fa349ac4b140378c80d7b04cbdf4ac4ba51991bc5aeccb521117f5101ddf944336ec7d75451cba6'
