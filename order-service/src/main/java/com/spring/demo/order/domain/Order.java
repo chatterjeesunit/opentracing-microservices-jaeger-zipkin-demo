@@ -27,7 +27,7 @@ public class Order {
 
     private List<OrderItem> orderItems;
 
-    public BigDecimal totalCost() {
+    public BigDecimal getTotalCost() {
         return orderItems.stream()
                 .map(OrderItem::getItemCost)
                 .reduce(BigDecimal::add)

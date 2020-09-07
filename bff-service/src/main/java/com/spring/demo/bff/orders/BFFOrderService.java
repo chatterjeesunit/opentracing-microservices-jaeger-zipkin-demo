@@ -3,14 +3,8 @@ package com.spring.demo.bff.orders;
 import com.spring.demo.bff.orders.client.CustomerClient;
 import com.spring.demo.bff.orders.client.OrderClient;
 import com.spring.demo.bff.orders.client.ProductClient;
-import com.spring.demo.bff.orders.client.domain.Customer;
-import com.spring.demo.bff.orders.client.domain.Order;
-import com.spring.demo.bff.orders.client.domain.OrderItem;
-import com.spring.demo.bff.orders.client.domain.Product;
-import com.spring.demo.bff.orders.domain.CustomerOrderDTO;
-import com.spring.demo.bff.orders.domain.OrderDTO;
-import com.spring.demo.bff.orders.domain.OrderItemDTO;
-import com.spring.demo.bff.orders.domain.ProductDTO;
+import com.spring.demo.bff.orders.client.domain.*;
+import com.spring.demo.bff.orders.domain.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,11 +30,15 @@ public class BFFOrderService {
     private OrderClient orderClient;
 
     public List<Customer> getAllCustomers(String pageNumber, String pageSize) {
-        return customerClient.getCustomers(pageNumber, pageSize);
+        log.info("Fetching all customers: pageNum = {}, pageSize = {}", pageNumber, pageSize);
+        List<Customer> customers = customerClient.getCustomers(pageNumber, pageSize);
+        log.info("Got {} customer records", customers.size());
+        return customers;
     }
 
     
     public CustomerOrderDTO getAllOrderForCustomer(String customerId) {
+        log.info("Fetch all orders for customer: {}", customerId);
 
         log.info("Fetching customer details : {}", customerId);
         Customer customerDetail = customerClient.getCustomerDetail(customerId);
@@ -52,17 +50,19 @@ public class BFFOrderService {
 
         List<OrderDTO> orders =
                 ordersForClient.stream().map(order -> {
+                    log.info("Fetching details for order");
                     List<OrderItemDTO> orderItems = order.getOrderItems().stream().map(orderItem -> {
                         Product productDetail = fetchProductDetails(orderItem);
                         return convertToOrderItemDTO(orderItem, productDetail);
                     }).collect(Collectors.toList());
 
+                    log.info("Creating OrderDTO");
                     return convertToOrderDTO(order, orderItems);
                 }).collect(Collectors.toList());
 
 
         return CustomerOrderDTO.builder()
-                .customer(customerDetail)
+                .customer(convertToCustomerDTO(customerDetail))
                 .orders(orders)
                 .build();
     }
@@ -71,6 +71,31 @@ public class BFFOrderService {
         log.info("Fetching product details for product : {}", orderItem.getProductId());
         Product productDetail = productClient.getProductDetail(orderItem.getProductId());
         return productDetail;
+    }
+
+    private CustomerDTO convertToCustomerDTO(Customer customer) {
+        log.info("Creating Customer DTO");
+        AddressDTO addressDTO = customer.getAddresses().stream()
+                .filter(address -> AddressType.BILLING.equals(address.getAddressType()))
+                .findFirst()
+                .map(address ->
+                        AddressDTO.builder()
+                                .city(address.getCity())
+                                .country(address.getCountry())
+                                .stateCode(address.getStateCode())
+                                .streetAddress(address.getStreetAddress())
+                                .zipCode(address.getZipCode())
+                                .build())
+                .orElse(null);
+
+        return CustomerDTO.builder()
+                .id(customer.getCustomerGuid())
+                .emailAddress(customer.getEmailAddress())
+                .firstName(customer.getFirstName())
+                .lastName(customer.getLastName())
+                .gender(customer.getGender())
+                .billingAddress(addressDTO)
+                .build();
     }
 
     private OrderDTO convertToOrderDTO(Order order, List<OrderItemDTO> orderItems) {
