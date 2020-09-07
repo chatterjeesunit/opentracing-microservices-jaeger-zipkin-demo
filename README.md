@@ -1,6 +1,9 @@
 # Jaeger Microservice Demo
 A demo application with jaeger tracing demo created for the blog - https://developerpod.com/2020/09/08/microservices-distributed-tracing-with-jaeger/
 
+## Demo App Architecture
+![Architecture](/resources/JaegerDemoApp.png)
+
 ## Running the application
 ##### Pre-requisite
  - Docker
