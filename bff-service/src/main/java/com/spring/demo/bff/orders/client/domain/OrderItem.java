@@ -1,4 +1,4 @@
-package com.spring.demo.bff.orders.domain;
+package com.spring.demo.bff.orders.client.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,18 +14,9 @@ import java.math.BigDecimal;
 public class OrderItem {
 
     private Long id;
-
-    @NotNull
     private Long orderId;
-
-    @NotNull
     private String productId;
-
     private BigDecimal quantity;
-
     private BigDecimal unitPrice;
-
-    public BigDecimal getItemCost() {
-        return unitPrice.multiply(quantity);
-    }
+    public BigDecimal itemCost;
 }

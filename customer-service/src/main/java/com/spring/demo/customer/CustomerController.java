@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/customer")
@@ -21,12 +22,19 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getCustomerDetail(@PathVariable(name = "id") String customerId) {
+    public ResponseEntity<?> getCustomerDetail(@PathVariable(name = "id") String customerId,
+                                               @RequestParam(value = "fetchByGuid", required = false, defaultValue = "true") boolean fetchByGuid) {
         try {
-            Long customerIdLong = Long.valueOf(customerId);
-            Customer customer = customerService.getCustomerById(customerIdLong)
-                    .orElseThrow(()->new RuntimeException("Customer does not exists"));
-            return ResponseEntity.ok(customer);
+            if(fetchByGuid) {
+                Customer customer = customerService.getCustomerByGuid(UUID.fromString(customerId))
+                        .orElseThrow(()->new RuntimeException("Customer does not exists"));
+                return ResponseEntity.ok(customer);
+            }else {
+                Long customerIdLong = Long.valueOf(customerId);
+                Customer customer = customerService.getCustomerById(customerIdLong)
+                        .orElseThrow(()->new RuntimeException("Customer does not exists"));
+                return ResponseEntity.ok(customer);
+            }
         }catch(Exception ex) {
             return handleException(ex);
         }

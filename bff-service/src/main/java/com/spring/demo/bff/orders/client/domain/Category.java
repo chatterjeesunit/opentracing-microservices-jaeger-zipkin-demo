@@ -1,4 +1,4 @@
-package com.spring.demo.bff.orders.domain;
+package com.spring.demo.bff.orders.client.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,5 @@ import javax.validation.constraints.NotNull;
 public class Category {
 
     private Long id;
-
-    @NotNull
     private String name;
 }

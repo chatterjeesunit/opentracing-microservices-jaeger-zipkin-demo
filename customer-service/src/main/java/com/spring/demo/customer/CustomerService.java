@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Log4j2
@@ -30,6 +31,12 @@ public class CustomerService {
     public Optional<Customer> getCustomerById(Long customerId) {
         log.info("Fetching customer by id: {}", customerId);
         Optional<CustomerEntity> customerEntity = customerRepository.findById(customerId);
+        return customerEntity.map(customer -> modelMapper.map(customer, Customer.class));
+    }
+
+    public Optional<Customer> getCustomerByGuid(UUID customerGuid) {
+        log.info("Fetching customer by id: {}", customerGuid);
+        Optional<CustomerEntity> customerEntity = customerRepository.findCustomerByCustomerGuid(customerGuid);
         return customerEntity.map(customer -> modelMapper.map(customer, Customer.class));
     }
 
