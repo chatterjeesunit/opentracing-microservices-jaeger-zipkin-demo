@@ -18,14 +18,14 @@ services:
     ports:
       - 5432:5432
     networks:
-      internal-nw:
-      external-nw:
+      - internal-nw
+      - external-nw
 
   jaeger:
     image: 'jaegertracing/all-in-one:1.19'
     networks:
-      internal-nw:
-      external-nw:
+      - internal-nw
+      - external-nw
     environment:
       COLLECTOR_ZIPKIN_HTTP_PORT: 9411
     ports:
@@ -42,7 +42,7 @@ services:
     build:
       context: ./config-server
       dockerfile: Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on:
       - jaeger
     ports:
@@ -52,14 +52,14 @@ services:
       OPENTRACING_JAEGER_ENABLED: 'true'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
+      OPENTRACING.JAEGER.LOG-SPANS: 'false'
     networks:
-      internal-nw:
+      - internal-nw
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
       interval: 30s
       timeout: 10s
       retries: 5
-
 
   customer-service:
     build:
@@ -69,7 +69,7 @@ services:
       - database
       - config-server
       - jaeger
-    restart: always
+    restart: unless-stopped
     ports:
       - 8080
     environment:
@@ -78,9 +78,9 @@ services:
       OPENTRACING_JAEGER_ENABLED: 'true'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
+      OPENTRACING.JAEGER.LOG-SPANS: 'false'
     networks:
-      internal-nw:
-
+      - internal-nw
 
   product-service:
     build:
@@ -90,7 +90,7 @@ services:
       - database
       - config-server
       - jaeger
-    restart: always
+    restart: unless-stopped
     ports:
       - 8080
     environment:
@@ -99,8 +99,9 @@ services:
       OPENTRACING_JAEGER_ENABLED: 'true'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
+      OPENTRACING.JAEGER.LOG-SPANS: 'false'
     networks:
-      internal-nw:
+      - internal-nw
 
   order-service:
     build:
@@ -110,7 +111,7 @@ services:
       - database
       - config-server
       - jaeger
-    restart: always
+    restart: unless-stopped
     ports:
       - 8080
     environment:
@@ -119,9 +120,9 @@ services:
       OPENTRACING_JAEGER_ENABLED: 'true'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
+      OPENTRACING.JAEGER.LOG-SPANS: 'false'
     networks:
-      internal-nw:
-
+      - internal-nw
 
   bff-service:
     build:
@@ -133,7 +134,7 @@ services:
       - product-service
       - order-service
       - jaeger
-    restart: always
+    restart: unless-stopped
     ports:
       - 9000:8080
     environment:
@@ -142,6 +143,40 @@ services:
       OPENTRACING_JAEGER_ENABLED: 'true'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
+      OPENTRACING.JAEGER.LOG-SPANS: 'false'
     networks:
-      internal-nw:
-      external-nw:
+      - internal-nw
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.bff-service.rule=Host(`dev-sandbox`)
+      - traefik.http.routers.bff-service.entrypoints=http
+      - traefik.http.services.bff-service.loadbalancer.server.port=8080
+
+  load-balancer:
+    image: 'traefik:v2.3'
+    command: |
+      --providers.docker=true
+      --providers.docker.exposedbydefault=false
+      --entryPoints.http.address=":80"
+      --accesslog
+      --log.level=INFO
+      --api=true
+      --api.insecure=true
+      --api.dashboard=true
+      --tracing.jaeger=true
+      --tracing.jaeger.localAgentHostPort=jaeger:6831
+    ports:
+      - '80:80'
+      - '8080:8080'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    networks:
+      - internal-nw
+      - external-nw
+    depends_on:
+      - bff-service
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik_http.rule=Host(`dev-sandbox`)
+      - traefik.http.routers.traefik_http.service=api@internal
+      - traefik.http.routers.traefik_http.entrypoints=http
