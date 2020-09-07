@@ -1,25 +1,20 @@
 package com.spring.demo.order.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.spring.demo.order.domain.OrderItem;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.spring.demo.order.domain.OrderStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.ZonedDateTime;
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity(name = "order_items")
 public class OrderItemEntity {
 
@@ -28,23 +23,19 @@ public class OrderItemEntity {
     @Generated(GenerationTime.ALWAYS)
     private Long id;
 
-    @Column(name = "order_id")
-    private @NonNull Long orderId;
-
     @Column(name = "product_id", columnDefinition = "uuid")
     @org.hibernate.annotations.Type(type="org.hibernate.type.PostgresUUIDType")
     @Generated(GenerationTime.ALWAYS)
     private UUID productId;
 
-    @Column(name = "order_date")
-    private ZonedDateTime orderDate;
+    @NotNull
+    private BigDecimal quantity;
 
     @NotNull
-    @Column(name = "order_status")
-    private OrderStatus orderStatus;
+    @Column(name = "unit_price")
+    private BigDecimal unitPrice;
 
-    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = OrderItemEntity.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
-    @JsonManagedReference
-    private List<OrderItem> orderItems;
+    @ManyToOne
+    @JsonBackReference
+    private OrderEntity order;
 }
