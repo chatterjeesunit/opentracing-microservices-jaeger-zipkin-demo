@@ -14,7 +14,7 @@ services:
       POSTGRES_DB: testdb
     volumes:
       - ~/data/jaeger-pgres-13:/var/lib/postgresql/data
-      - ./docker/postgres-init.sh:/docker-entrypoint-initdb.d/postgres-init.sh
+      - ./resources/docker/postgres-init.sh:/docker-entrypoint-initdb.d/postgres-init.sh
     ports:
       - 5432:5432
     networks:
