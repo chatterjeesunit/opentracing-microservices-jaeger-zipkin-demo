@@ -1,6 +1,38 @@
 allprojects {
     apply plugin: 'java'
 
+    sourceCompatibility = '11'
+
+    repositories {
+        mavenCentral()
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    ext {
+        set('springCloudVersion', "Hoxton.SR8")
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        // implementation group: 'io.opentracing.contrib', name: 'opentracing-spring-jaeger-cloud-starter', version: '3.1.2'
+        implementation group: 'io.opentracing.contrib', name: 'opentracing-spring-cloud-starter', version: '0.5.7'
+        implementation group: 'io.opentracing.contrib', name: 'opentracing-spring-jaeger-starter', version: '3.1.2'
+
+
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+    }
+
     task buildJar(type: Exec) {
         executable "sh"
         args "-c", "mkdir -p build/dependency && cd build/dependency && jar -xf ../libs/*.jar"
