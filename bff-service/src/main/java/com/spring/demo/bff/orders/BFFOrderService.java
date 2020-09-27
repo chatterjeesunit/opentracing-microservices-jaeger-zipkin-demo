@@ -5,6 +5,9 @@ import com.spring.demo.bff.orders.client.OrderClient;
 import com.spring.demo.bff.orders.client.ProductClient;
 import com.spring.demo.bff.orders.client.domain.*;
 import com.spring.demo.bff.orders.domain.*;
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,8 @@ import java.util.stream.Collectors;
 @Log4j2
 public class BFFOrderService {
 
+    @Autowired
+    private Tracer tracer;
 
     @Autowired
     private CustomerClient customerClient;
@@ -38,33 +43,40 @@ public class BFFOrderService {
 
     
     public CustomerOrderDTO getAllOrderForCustomer(String customerId) {
-        log.info("Fetch all orders for customer: {}", customerId);
+        Span span = tracer.buildSpan("BFFOrderService.GetAllOrdersForCustomer").start();
 
-        log.info("Fetching customer details : {}", customerId);
-        Customer customerDetail = customerClient.getCustomerDetail(customerId);
+        try (Scope scope = tracer.scopeManager().activate(span)) {
+            log.info("Fetch all orders for customer: {}", customerId);
 
-        log.info("Fetching orders for customer : {}", customerId);
-        List<Order> ordersForClient = orderClient.getOrdersForClient(customerId);
+            log.info("Fetching customer details : {}", customerId);
+            Customer customerDetail = customerClient.getCustomerDetail(customerId);
 
-        log.info("Got {} orders", ordersForClient.size());
+            log.info("Fetching orders for customer : {}", customerId);
+            List<Order> ordersForClient = orderClient.getOrdersForClient(customerId);
 
-        List<OrderDTO> orders =
-                ordersForClient.stream().map(order -> {
-                    log.info("Fetching details for order");
-                    List<OrderItemDTO> orderItems = order.getOrderItems().stream().map(orderItem -> {
-                        Product productDetail = fetchProductDetails(orderItem);
-                        return convertToOrderItemDTO(orderItem, productDetail);
+            log.info("Got {} orders", ordersForClient.size());
+
+            List<OrderDTO> orders =
+                    ordersForClient.stream().map(order -> {
+                        log.info("Fetching details for order");
+                        List<OrderItemDTO> orderItems = order.getOrderItems().stream().map(orderItem -> {
+                            Product productDetail = fetchProductDetails(orderItem);
+                            return convertToOrderItemDTO(orderItem, productDetail);
+                        }).collect(Collectors.toList());
+
+                        log.info("Creating OrderDTO");
+                        return convertToOrderDTO(order, orderItems);
                     }).collect(Collectors.toList());
 
-                    log.info("Creating OrderDTO");
-                    return convertToOrderDTO(order, orderItems);
-                }).collect(Collectors.toList());
 
+            return CustomerOrderDTO.builder()
+                    .customer(convertToCustomerDTO(customerDetail))
+                    .orders(orders)
+                    .build();
+        }finally {
+            span.finish();
+        }
 
-        return CustomerOrderDTO.builder()
-                .customer(convertToCustomerDTO(customerDetail))
-                .orders(orders)
-                .build();
     }
 
     private Product fetchProductDetails(OrderItem orderItem) {
@@ -109,23 +121,34 @@ public class BFFOrderService {
     }
 
     private OrderItemDTO convertToOrderItemDTO(OrderItem item, Product productDetail) {
-        ProductDTO productDTO = convertToProductDTO(productDetail);
+        Span span = tracer.buildSpan("BFFOrderService.convertToOrderItemDTO").start();
+        try (Scope scope = tracer.scopeManager().activate(span)) {
+            ProductDTO productDTO = convertToProductDTO(productDetail);
 
-        return OrderItemDTO.builder()
-                .product(productDTO)
-                .quantity(item.getQuantity())
-                .unitPrice(item.getUnitPrice())
-                .totalCost(item.itemCost)
-                .build();
+            return OrderItemDTO.builder()
+                    .product(productDTO)
+                    .quantity(item.getQuantity())
+                    .unitPrice(item.getUnitPrice())
+                    .totalCost(item.itemCost)
+                    .build();
+        }finally {
+            span.finish();
+        }
     }
 
     private ProductDTO convertToProductDTO(Product productDetail) {
-        return ProductDTO.builder()
-                .id(productDetail.getProductGuid())
-                .brand(productDetail.getBrand())
-                .category(productDetail.getCategory().getName())
-                .name(productDetail.getName())
-                .ratings(productDetail.getRatings())
-                .build();
+        Span span = tracer.buildSpan("BFFOrderService.convertToProductDTO").start();
+        try(Scope scope = tracer.scopeManager().activate(span)) {
+
+            return ProductDTO.builder()
+                    .id(productDetail.getProductGuid())
+                    .brand(productDetail.getBrand())
+                    .category(productDetail.getCategory().getName())
+                    .name(productDetail.getName())
+                    .ratings(productDetail.getRatings())
+                    .build();
+        }finally {
+            span.finish();
+        }
     }
 }
