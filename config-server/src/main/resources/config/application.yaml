@@ -20,3 +20,6 @@ opentracing:
       host: localhost
       port: 6831
     enabled: true
+  zipkin:
+    http-sender:
+      baseUrl: http://localhost:9411

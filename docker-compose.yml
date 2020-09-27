@@ -28,6 +28,14 @@ services:
       - 16686:16686     # QUERY - serve frontend
       - 14268:14268     # COLLECTOR - accept jaeger.thrift directly from clients
 
+  zipkin:
+    image: openzipkin/zipkin
+    networks:
+      - container-nw
+    ports:
+      - 9411:9411
+
+
   config-server:
     build:
       context: ./config-server
@@ -40,7 +48,8 @@ services:
       OPENTRACING_JAEGER_ENABLED: 'true'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
-      OPENTRACING.JAEGER.LOG-SPANS: 'false'
+      OPENTRACING_JAEGER_LOG_SPANS: 'false'
+      OPENTRACING_ZIPKIN_HTTP_SENDER_BASE_URL: 'http://zipkin:9411'
     networks:
       - container-nw
 
@@ -64,7 +73,8 @@ services:
       OPENTRACING_JAEGER_ENABLED: 'true'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
-      OPENTRACING.JAEGER.LOG-SPANS: 'false'
+      OPENTRACING_JAEGER_LOG_SPANS: 'false'
+      OPENTRACING_ZIPKIN_HTTP_SENDER_BASE_URL: 'http://zipkin:9411'
     networks:
       - container-nw
 
@@ -88,7 +98,8 @@ services:
       OPENTRACING_JAEGER_ENABLED: 'true'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
-      OPENTRACING.JAEGER.LOG-SPANS: 'false'
+      OPENTRACING_JAEGER_LOG_SPANS: 'false'
+      OPENTRACING_ZIPKIN_HTTP_SENDER_BASE_URL: 'http://zipkin:9411'
     networks:
       - container-nw
 
@@ -112,7 +123,8 @@ services:
       OPENTRACING_JAEGER_ENABLED: 'true'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
-      OPENTRACING.JAEGER.LOG-SPANS: 'false'
+      OPENTRACING_JAEGER_LOG_SPANS: 'false'
+      OPENTRACING_ZIPKIN_HTTP_SENDER_BASE_URL: 'http://zipkin:9411'
     networks:
       - container-nw
 
@@ -140,7 +152,8 @@ services:
       OPENTRACING_JAEGER_ENABLED: 'true'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
-      OPENTRACING.JAEGER.LOG-SPANS: 'false'
+      OPENTRACING_JAEGER_LOG_SPANS: 'false'
+      OPENTRACING_ZIPKIN_HTTP_SENDER_BASE_URL: 'http://zipkin:9411'
     networks:
       - container-nw
     labels:
@@ -167,7 +180,9 @@ services:
       --api.insecure=true
       --api.dashboard=true
       --tracing.jaeger=true
-      --tracing.jaeger.localAgentHostPort=jaeger:6831"
+      --tracing.jaeger.localAgentHostPort=jaeger:6831
+      --tracing.zipkin=false
+      --tracing.zipkin.httpEndPoint=http://zipkin:9411/api/v2/spans"
     restart: unless-stopped
     ports:
       - '80:80'
