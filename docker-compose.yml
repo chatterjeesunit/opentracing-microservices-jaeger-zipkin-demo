@@ -51,7 +51,7 @@ services:
     depends_on:
       - database
       - config-server
-    command: sh -c " dockerize -timeout 60s -wait-retry-interval 5s
+    command: sh -c " dockerize -timeout 300s -wait-retry-interval 15s
         -wait tcp://database:5432
         -wait http://config-server:8080/actuator/health
         java -jar /app.jar"
@@ -75,7 +75,7 @@ services:
     depends_on:
       - database
       - config-server
-    command: sh -c " dockerize -timeout 60s -wait-retry-interval 5s
+    command: sh -c " dockerize -timeout 300s -wait-retry-interval 15s
       -wait tcp://database:5432
       -wait http://config-server:8080/actuator/health
       java -jar /app.jar"
@@ -99,7 +99,7 @@ services:
     depends_on:
       - database
       - config-server
-    command: sh -c " dockerize -timeout 60s -wait-retry-interval 5s
+    command: sh -c " dockerize -timeout 300s -wait-retry-interval 15s
       -wait tcp://database:5432
       -wait http://config-server:8080/actuator/health
       java -jar /app.jar"
@@ -125,7 +125,7 @@ services:
       - customer-service
       - product-service
       - order-service
-    command: sh -c " dockerize -timeout 60s -wait-retry-interval 5s
+    command: sh -c " dockerize -timeout 300s -wait-retry-interval 15s
       -wait http://config-server:8080/actuator/health
       -wait http://customer-service:8080/actuator/health
       -wait http://product-service:8080/actuator/health
@@ -155,7 +155,7 @@ services:
       dockerfile: TraefikCustom-Dockerfile
 #    image: 'traefik:v2.3'
     command: sh -c "
-      dockerize -timeout 60s -wait-retry-interval 5s
+      dockerize -timeout 300s -wait-retry-interval 15s
       -wait http://bff-service:8080/actuator/health
       /entrypoint.sh
       --providers.docker=true
