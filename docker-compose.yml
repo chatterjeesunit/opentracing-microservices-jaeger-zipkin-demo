@@ -45,7 +45,7 @@ services:
       - 8080
     environment:
       OPENTRACING_JAEGER_SERVICE-NAME: Config Service
-      OPENTRACING_JAEGER_ENABLED: 'true'
+      OPENTRACING_JAEGER_ENABLED: 'false'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
       OPENTRACING_JAEGER_LOG_SPANS: 'false'
@@ -70,7 +70,7 @@ services:
     environment:
       SPRING_CLOUD_CONFIG_URI: 'http://config-server:8080'
       OPENTRACING_JAEGER_SERVICE-NAME: Customer Service
-      OPENTRACING_JAEGER_ENABLED: 'true'
+      OPENTRACING_JAEGER_ENABLED: 'false'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
       OPENTRACING_JAEGER_LOG_SPANS: 'false'
@@ -95,7 +95,7 @@ services:
     environment:
       SPRING_CLOUD_CONFIG_URI: 'http://config-server:8080'
       OPENTRACING_JAEGER_SERVICE-NAME: Product Service
-      OPENTRACING_JAEGER_ENABLED: 'true'
+      OPENTRACING_JAEGER_ENABLED: 'false'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
       OPENTRACING_JAEGER_LOG_SPANS: 'false'
@@ -120,7 +120,7 @@ services:
     environment:
       SPRING_CLOUD_CONFIG_URI: 'http://config-server:8080'
       OPENTRACING_JAEGER_SERVICE-NAME: Order Service
-      OPENTRACING_JAEGER_ENABLED: 'true'
+      OPENTRACING_JAEGER_ENABLED: 'false'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
       OPENTRACING_JAEGER_LOG_SPANS: 'false'
@@ -149,7 +149,7 @@ services:
     environment:
       SPRING_CLOUD_CONFIG_URI: 'http://config-server:8080'
       OPENTRACING_JAEGER_SERVICE-NAME: BFF Service
-      OPENTRACING_JAEGER_ENABLED: 'true'
+      OPENTRACING_JAEGER_ENABLED: 'false'
       OPENTRACING_JAEGER_UDP-SENDER_HOST: jaeger
       OPENTRACING_JAEGER_UDP-SENDER_PORT: 6831
       OPENTRACING_JAEGER_LOG_SPANS: 'false'
@@ -179,9 +179,9 @@ services:
       --api=true
       --api.insecure=true
       --api.dashboard=true
-      --tracing.jaeger=true
+      --tracing.jaeger=false
       --tracing.jaeger.localAgentHostPort=jaeger:6831
-      --tracing.zipkin=false
+      --tracing.zipkin=true
       --tracing.zipkin.httpEndPoint=http://zipkin:9411/api/v2/spans"
     restart: unless-stopped
     ports:
