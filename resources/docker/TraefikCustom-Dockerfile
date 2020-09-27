@@ -1,0 +1,12 @@
+FROM traefik:v2.3
+LABEL maintainer="Sunit Chatterjee (developerpod.com)"
+
+# Add Dockerize Support
+ENV DOCKERIZE_VERSION v0.6.1
+ENV DOCKERIZE_NAME dockerize-alpine-linux-amd64
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/$DOCKERIZE_NAME-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf $DOCKERIZE_NAME-$DOCKERIZE_VERSION.tar.gz \
+    && rm $DOCKERIZE_NAME-$DOCKERIZE_VERSION.tar.gz
+
+
+CMD ["/entrypoint.sh"]

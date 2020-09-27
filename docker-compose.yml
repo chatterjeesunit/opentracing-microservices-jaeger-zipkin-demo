@@ -150,8 +150,14 @@ services:
       - traefik.http.services.bff-service.loadbalancer.server.port=8080
 
   load-balancer:
-    image: 'traefik:v2.3'
-    command: |
+    build:
+      context: ./resources/docker
+      dockerfile: TraefikCustom-Dockerfile
+#    image: 'traefik:v2.3'
+    command: sh -c "
+      dockerize -timeout 60s -wait-retry-interval 5s
+      -wait http://bff-service:8080/actuator/health
+      /entrypoint.sh
       --providers.docker=true
       --providers.docker.exposedbydefault=false
       --entryPoints.http.address=":80"
@@ -161,7 +167,8 @@ services:
       --api.insecure=true
       --api.dashboard=true
       --tracing.jaeger=true
-      --tracing.jaeger.localAgentHostPort=jaeger:6831
+      --tracing.jaeger.localAgentHostPort=jaeger:6831"
+    restart: unless-stopped
     ports:
       - '80:80'
       - '8080:8080'
