@@ -67,14 +67,10 @@ Connect to pgAdmin at http://localhost:5000, and login using the admin credentia
 
 
 ## SAMPLE REST END POINTS
-<br> 
- * Get all customers
- <br> 
- 
- `http://localhost/api/v1/bff/customers?pageNum=0&pageSize=10`
 
+ * Get all customers
+ ```http://localhost/api/v1/bff/customers?pageNum=0&pageSize=10```
 
  * Get All Orders for a customer 
-  <br>
-  `http://localhost/api/v1/bff/customer/5c0e7fe0-f062-11ea-9298-0242c0a88003/orders`
+  ```http://localhost/api/v1/bff/customer/5c0e7fe0-f062-11ea-9298-0242c0a88003/orders```
  
