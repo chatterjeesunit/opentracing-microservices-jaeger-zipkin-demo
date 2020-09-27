@@ -13,13 +13,16 @@ Change following configurations in `docker-compose.yml`
   * Set `--tracing.jaeger=true` and `--tracing.zipkin=false` in the `command` for the `load-balancer` service.
   * Access Jaeger UI on - http://localhost:16686/search
   <br>
+
 #### To run Zipkin
 Change following configurations in `docker-compose.yml`
   * Set `OPENTRACING_JAEGER_ENABLED: 'false'`, in environment variables for following services (`config-server`, `customer-service`, `product-service`, `order-service`, `bff-service`)
   * Set `--tracing.jaeger=false` and `--tracing.zipkin=true` in the `command` for the `load-balancer` service.
   * Acces Zipkin UI on - http://localhost:9411/zipkin/
 <br>
+
 ## Running the application
+
 ##### Pre-requisite
  - Docker
  - Java 11
@@ -64,11 +67,14 @@ Connect to pgAdmin at http://localhost:5000, and login using the admin credentia
 
 
 ## SAMPLE REST END POINTS
+<br> 
+ * Get all customers
+ <br> 
+ 
+ `http://localhost/api/v1/bff/customers?pageNum=0&pageSize=10`
 
-  * Get all customers
-  <br>
-  `http://localhost/api/v1/bff/customers?pageNum=0&pageSize=10`
-  * Get All Orders for a customer 
+
+ * Get All Orders for a customer 
   <br>
   `http://localhost/api/v1/bff/customer/5c0e7fe0-f062-11ea-9298-0242c0a88003/orders`
  
