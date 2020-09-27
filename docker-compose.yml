@@ -51,6 +51,10 @@ services:
     depends_on:
       - database
       - config-server
+    command: sh -c " dockerize -timeout 60s -wait-retry-interval 5s
+        -wait tcp://database:5432
+        -wait http://config-server:8080/actuator/health
+        java -jar /app.jar"
     restart: unless-stopped
     ports:
       - 8080
@@ -71,6 +75,10 @@ services:
     depends_on:
       - database
       - config-server
+    command: sh -c " dockerize -timeout 60s -wait-retry-interval 5s
+      -wait tcp://database:5432
+      -wait http://config-server:8080/actuator/health
+      java -jar /app.jar"
     restart: unless-stopped
     ports:
       - 8080
@@ -91,6 +99,10 @@ services:
     depends_on:
       - database
       - config-server
+    command: sh -c " dockerize -timeout 60s -wait-retry-interval 5s
+      -wait tcp://database:5432
+      -wait http://config-server:8080/actuator/health
+      java -jar /app.jar"
     restart: unless-stopped
     ports:
       - 8080
@@ -113,6 +125,12 @@ services:
       - customer-service
       - product-service
       - order-service
+    command: sh -c " dockerize -timeout 60s -wait-retry-interval 5s
+      -wait http://config-server:8080/actuator/health
+      -wait http://customer-service:8080/actuator/health
+      -wait http://product-service:8080/actuator/health
+      -wait http://order-service:8080/actuator/health
+      java -jar /app.jar"
     restart: unless-stopped
     ports:
       - 8080
