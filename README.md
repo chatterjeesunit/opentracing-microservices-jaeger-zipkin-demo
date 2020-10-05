@@ -74,3 +74,8 @@ Connect to pgAdmin at http://localhost:5000, and login using the admin credentia
  * Get All Orders for a customer 
   ```http://localhost/api/v1/bff/customer/5c0e7fe0-f062-11ea-9298-0242c0a88003/orders```
  
+ * Encrypt properties for 
+  ```curl http://localhost:<config-server-port>/encrypt -d dummyPropValue```
+       
+ * Get Config for Customer Service
+  ```curl http://localhost:<config-server-port>/product-service/default```
