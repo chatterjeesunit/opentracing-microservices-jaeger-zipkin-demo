@@ -25,7 +25,6 @@ allprojects {
 
         // implementation group: 'io.opentracing.contrib', name: 'opentracing-spring-jaeger-cloud-starter', version: '3.1.2'
         implementation group: 'io.opentracing.contrib', name: 'opentracing-spring-cloud-starter', version: '0.5.7'
-        implementation group: 'io.opentracing.contrib', name: 'opentracing-spring-jaeger-starter', version: '3.1.2'
         implementation group: 'io.opentracing.contrib', name: 'opentracing-spring-zipkin-starter', version: '0.2.0'
         implementation group: 'io.zipkin.brave', name: 'brave-spring-beans', version: '5.12.6'
 

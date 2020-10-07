@@ -15,11 +15,6 @@ logging:
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 
 opentracing:
-  jaeger:
-    udp-sender:
-      host: localhost
-      port: 6831
-    enabled: true
   zipkin:
     http-sender:
       baseUrl: http://localhost:9411
