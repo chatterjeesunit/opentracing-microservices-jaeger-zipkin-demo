@@ -1,5 +1,5 @@
 # Open Tracing Microservice Demo (with Jaeger or Zipkin)
-A sample microservices application with OpenTracing with Jaeger or Zipkin. To know more read the blog - https://developerpod.com/2020/09/08/microservices-distributed-tracing-with-jaeger/
+A sample microservices application with OpenTracing with Jaeger or Zipkin. To know more read the blog - https://sunitc.dev/2020/09/08/microservices-distributed-tracing-with-jaeger/
 
 ## Demo App Architecture
 ![Architecture](/resources/OpenTracingDemoApp.png)
